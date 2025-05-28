@@ -1,0 +1,13 @@
+# private evidence
+Proof/
+Proof/prethought/
+Proof/used/
+Proof/2025-06/
+Proof/2025-07/
+*.wav
+*.jpg
+raw_logs/
+
+# system
+.DS_Store
+Thumbs.db
