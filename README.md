@@ -146,6 +146,6 @@ BlindEntropyFork/
 ├── log_anomaly.py               # register anomalies | регистр аномалий
 ├── encrypt_utils.py             # AES-256-GCM helper | шифратор AES-256-GCM
 ├── log_template.csv             # public master log | публичный лог
-├── task_hashes.json             # 25 tasks (SHA-256) | 25 задач (SHA-256)
+├── tasks_hashes.json             # 25 tasks (SHA-256) | 25 задач (SHA-256)
 ├── categories.json              # Сategory maps (SHA-256) | Карты категорий (SHA-256)
 └── Proof/                       # private evidence   | закрытое хранилище

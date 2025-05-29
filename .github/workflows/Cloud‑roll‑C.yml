@@ -2,7 +2,7 @@ name: Cloud‑roll‑C
 
 on:
   schedule:
-    # 15:00 MSK = 12:00 UTC
+    # 15:00 MSK = 12:00 UTC
     - cron: '0 12 * * *'
   workflow_dispatch:
 
@@ -20,7 +20,7 @@ jobs:
       - run: pip install requests pycryptodome
 
       - name: write‑key
-        run: echo "$AES_KEY" > aes_key.txt
+        run: echo -n "$AES_KEY" > aes_key.txt
         env:
           AES_KEY: ${{ secrets.AES_KEY }}
 
