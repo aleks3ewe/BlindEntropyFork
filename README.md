@@ -1,66 +1,151 @@
-# Quantum-random task experiment & anomaly log (June 1 – July 31, 2025)
+# BlindEntropyFork Protocol — Version 2025-05-29
 
-🔗 Launch thread → https://x.com/morkov_exe/status/1927586648558104628
+# Протокол BlindEntropyFork — версия 2025-05-29
 
-🔗 Live log (view
-only) → https://docs.google.com/spreadsheets/d/1ZvYtFKcOR5tLvyJg_MOl6e2nTHIQUt4qljv36XqV88c/edit?usp=sharing
-
-📄 Anomaly protocol → anomaly_protocol.md
-
-📄 Categories (hashed) → categories.json
+*Last edited / последнее обновление: 2025-05-29*
 
 ---
 
-## How it works?
+## 1. Hypothesis & Design
 
-0. Before roll: record A4 (pre-cognition thought, SHA-256 sealed)*
-1. At 09:00 MSK — one QRNG roll (raw ∈ 0...255)
-2. Task ID = raw % 25 + 1
-3. Complete the task fully before next roll (next day)
-4. If stuck ≥3 tries → mark as “SKIP”
-5. Log every roll + anomalies (A1–A5)
+## 1. Гипотеза и дизайн
 
-*PreHash = SHA-256 of the pre-cognition file (A4) recorded BEFORE the roll.
+### EN
+
+**Hypothesis (verbatim)**  
+*Quantum-randomized human action produces a higher daily rate of reproducibly defined anomalies in physical or semantic
+reality than inaction, all other factors being equal.*
+
+| Group | Roll time (MSK) | Agent    | Action | Conscious access to `TaskID` |
+|-------|-----------------|----------|--------|------------------------------|
+| **A** | 09:00           | Human    | ✔ yes  | ✔ yes                        |
+| **B** | 12:00           | Human    | ✖ no   | ✔ yes                        |
+| **C** | 15:00           | Cloud AI | ✖ no   | ✖ no                         |
+
+**Statistical statements**  
+*Unit of analysis = one calendar day.*
+
+* Let **λ<sub>k</sub> = (# anomalies in group *k*) / *N*<sub>days</sub>**.
+* *Null* H₀: λ<sub>A</sub> = λ<sub>B</sub> = λ<sub>C</sub>
+* *Alternative* H₁: λ<sub>A</sub> > λ<sub>B</sub> ≥ λ<sub>C</sub>
+
+Tests:
+
+1. χ² (2 × 3) on the daily counts,
+2. two planned contrasts (A–B, B–C) with Holm–Bonferroni correction.
+
+Global **α = 0.05 → α<sub>corr</sub> ≈ 0.025** per contrast.
+
+**Power calculation**  
+Simulated under H₀ and H₁ (Δλ ≥ +0.30 day⁻¹).  
+With *N* = 61 days → 1 − β = 0.82 (see `stats/power.ipynb`).
+
+### RU
+
+**Гипотеза (дословно)**  
+*При прочих равных условиях квантово-рандомизированное действие человека вызывает большую среднесуточную частоту
+воспроизводимо определяемых аномалий (физических или семантических), чем бездействие.*
+
+| Группа | Время броска (МСК) | Агент       | Действие | Осознанный доступ к `TaskID` |
+|--------|--------------------|-------------|----------|------------------------------|
+| **A**  | 09:00              | Человек     | ✔ да     | ✔ да                         |
+| **B**  | 12:00              | Человек     | ✖ нет    | ✔ да                         |
+| **C**  | 15:00              | Облачный ИИ | ✖ нет    | ✖ нет                        |
+
+**Статистические утверждения**  
+*Единица анализа — календарный день.*
+
+* **λ<sub>k</sub> = (кол-во аномалий в группе *k*) / *N*<sub>дней</sub>**
+* *Нулевая* H₀: λ<sub>A</sub> = λ<sub>B</sub> = λ<sub>C</sub>
+* *Альтернатива* H₁: λ<sub>A</sub> > λ<sub>B</sub> ≥ λ<sub>C</sub>
+
+Проверка:
+
+1. χ² (2 × 3) по суточным счётчикам;
+2. два запланированных контраста (A–B, B–C) с поправкой Холма–Бонферрони.
+
+Глобальный **α = 0.05 → α<sub>corr</sub> ≈ 0.025** на контраст.
+
+**Расчёт мощности**  
+Имитации при H₀ и H₁ (Δλ ≥ +0.30 дн⁻¹).  
+При *N* = 61 день получаем 1 − β = 0.82 (см. `stats/power.ipynb`).
 
 ---
 
-🔍 #BlindEntropyFork — anomaly-detection protocol
+## 2. Anomaly-detection protocol A1–A5
 
-Every “weird” event is logged only if it meets strict, reproducible rules.
-Each entry = timestamp + type code + proof (screenshot / hash link).
-Statistical tests (χ², p-values) will be computed after July 31, 2025.
+## 2. Протокол фиксации аномалий A1–A5
 
-Types A1–A5 👇
+> *The same temporal windows apply to A, B and C (roll ± 10 мин для A1; +60 мин для A2 и т.д.).*  
+> *Окна времени одинаковы для всех групп (± 10 мин для A1; +60 мин для A2 и т.д.).*
 
-A1: Technical glitch🤖
-> Δt ≤ 10 min around RNG roll / task start.  
-> Examples: sudden offline, crash, power loss ≥ 2 min.  
-> Proof: OS log / router LED / ping trace.
+| Code/Код | EN — Definition (short)            | RU — Краткое определение              | Proof / Доказательство              |
+|----------|------------------------------------|---------------------------------------|-------------------------------------|
+| **A1**   | Technical glitch, Δt ≤ 10 min      | Технический сбой, Δt ≤ 10 мин         | OS-лог, LED роутера или ping-трасса |
+| **A2**   | Semantic coincidence, +60 min      | Семантическое совпадение, +60 мин     | Скриншот, редкий ключ ≤ 1 раз/нед   |
+| **A3-1** | Same `TaskID` 2 days in a row      | Один и тот же `TaskID` два дня подряд | Точный χ², *p* = 0.04               |
+| **A3-2** | ≥ 3 tasks of one category / 7 days | ≥ 3 задач одной категории за 7 дней   | χ² против равномерности             |
+| **A4**   | *Pre-cognition* (A, B)             | *Пред-когниция* (только A, B)         | Файл пред-мысли + скрин броска      |
+| **A5**   | Spontaneous resolution ≥ 50 %      | Саморазрешение ≥ 50 %                 | Фото «до/после» + GPS/IDE-логи      |
 
-A2: Semantic coincidence 🖊️
-> Within 60 min after the roll a message / ad /
-> dialog contains a UNIQUE keyword of the task.  
-> Proof: screenshot with timestamp + underlined term (rare ≤ 1×/week in my data).
+*Double-blind coding* → *Двойное слепое кодирование*  
+Two independent encoders flag A2/A5 without knowing `TaskID`; inter-coder κ > 0.7 **or** consensus required.  
+Два независимых кодировщика отмечают A2/A5, не зная `TaskID`; коэффициент κ > 0.7 **или** обязательный консенсус.
 
-A3: Improbable repetition 🔁
-> A3-1 Same task ID rolls 2 days in a row (p≈4 %).  
-> A3-2 ≥ 3 tasks of one category in a 7-day window.  
-> Categories pre-published in categories.json. χ² test will follow.
+*A4 is undefined for C → field “—”.*  
+*A4 не определён для группы C → поле “—”.*
 
-A4: Pre-cognition💭
-> Before opening QRNG I record a spontaneous thought (audio/text, SHA-256 sealed).  
-> If that exact task rolls — anomaly.  
-> Evidence: pre-thought file + roll screenshot.
+---
 
-A5: Spontaneous resolution🎲
-> 50 % of a task completed without my action (e.g., room already cleaned).  
-> Need BEFORE / AFTER photos + proof I was absent (GPS / IDE logs).
+## 3. Daily pipeline
 
-📁 Verifiability
+## 3. Ежедневный конвейер
 
-1) 25 tasks and categories hashed via SHA-256 and published beforehand
-2) Each task completion has private proof (photos / logs / video)
-3) Logs and rolls are public and immutable
-4) Full methods + raw data will be released in August 2025
-5) Category keys are SHA-256 hashes of the labels.
-6) README, anomaly_protocol.md, tasks_hashes.json and categories.json are frozen.
+1. **Record pre-thought** (`Proof/prethought/…`) → `PreHash = SHA-256(file)`.  
+   **Записать пред-мысль** → `PreHash = SHA-256(файл)`.
+2. **09:00** A-roll: fetch 1 byte from ANU QRNG → `raw` → `TaskID = raw % 25 + 1`.  
+   **09:00** бросок A: 1 байт QRNG ANU → `TaskID`.
+3. Execute the task until next morning **or** mark **SKIP** after 3 failed tries.  
+   Выполнить задачу до утра **или** пометить **SKIP** после 3 неудачных попыток.
+4. Log `Date,Group,Raw,TaskID,EncTaskID,Done,Anomaly,PreHash,Proof` (CSV, OTS-sealed).  
+   Логировать строки формата … (CSV, подпись OpenTimestamps).
+5. **12:00** B-roll (same API); `TaskID` revealed, *no action taken*.  
+   **12:00** бросок B; `TaskID` раскрыт, действий нет.
+6. **15:00** C-roll (CI); `TaskID` encrypted, invisible to humans.  
+   **15:00** бросок C (в CI); `TaskID` зашифрован и скрыт.
+7. Encoders append anomalies into `anomaly_log.jsonl` via `log_anomaly.py`.  
+   Кодировщики добавляют аномалии в `anomaly_log.jsonl`.
+
+---
+
+## 4. Verifiability & Open Science
+
+## 4. Проверяемость и открытая наука
+
+* 25 tasks & category maps hashed (SHA-256) and **published 28 May 2025**.  
+  25 задач и карты категорий хэшированы и **опубликованы 28 мая 2025**.
+
+> https://x.com/morkov_exe/status/1927586648558104628
++ check first commit / проверь первый коммит
+
+* Every daily CSV and anomaly JSONL time-stamped via **OpenTimestamps**.  
+  Все дневные CSV и anomaly JSONL имеют метку времени OpenTimestamps.
+* Control logs (B) are read-only; AI logs (C) AES-256-GCM encrypted, key revealed **Aug 2025**.  
+  Логи контроля (B) доступны только для чтения; логи ИИ (C) зашифрованы AES-256-GCM, ключ раскрывается **авг 2025**.
+* Full raw data + analysis scripts released under *The Unlicense*.  
+  Данные и скрипты будут выложены под *The Unlicense*.
+
+---
+
+Thank you https://opentimestamps.org/! Stamp & Verify
+
+```text
+BlindEntropyFork/
+├── blind_entropy_roll.py        # universal A/B/C roll | универсальный бросок
+├── blind_entropy_proof.py       # bind before/after evidence | привязка доказательств
+├── log_anomaly.py               # register anomalies | регистр аномалий
+├── encrypt_utils.py             # AES-256-GCM helper | шифратор AES-256-GCM
+├── log_template.csv             # public master log | публичный лог
+├── task_hashes.json             # 25 tasks (SHA-256) | 25 задач (SHA-256)
+├── categories.json              # Сategory maps (SHA-256) | Карты категорий (SHA-256)
+└── Proof/                       # private evidence   | закрытое хранилище

@@ -1,2 +1,1 @@
-Date,Raw,TaskID,Done,Anomaly,PreHash,Proof
-2025-05-28,164,15,Y,—,6897112dbb4e8b6eca4e2d15384783067ad866482383f2f987d1d6cffa31024f,f1dfd229ee2fd385fecf67a6cdfdbf3b526fbf5bf15ed84ae02c4398e974d64c
+Date,Group,Raw,TaskID,EncTaskID,Done,Anomaly,PreHash,Proof

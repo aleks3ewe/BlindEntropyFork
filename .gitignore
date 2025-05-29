@@ -1,13 +1,17 @@
-# private evidence
+.idea
+
 Proof/
 Proof/prethought/
 Proof/used/
 Proof/2025-06/
 Proof/2025-07/
-*.wav
-*.jpg
+
 raw_logs/
 
-# system
+*.wav
+*.jpg
+
+.gitignore
+
 .DS_Store
 Thumbs.db

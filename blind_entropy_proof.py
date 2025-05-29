@@ -43,6 +43,10 @@ def save_log(header, rows):
         csv.writer(f).writerows([header] + rows)
 
 
+def is_empty(proof_field: str) -> bool:
+    return proof_field.strip() in {"", "—", "-"}
+
+
 def main():
     header, rows = load_log()
     idx = {k: header.index(k) for k in ["Date", "TaskID", "Done", "Proof"]}
@@ -55,7 +59,7 @@ def main():
             date, task_id = m.group(1), str(int(m.group(2)))
 
             for row in rows:
-                if row[idx["Date"]] == date and row[idx["TaskID"]] == task_id and row[idx["Proof"]] == "":
+                if row[idx["Date"]] == date and row[idx["TaskID"]] == task_id and is_empty(row[idx["Proof"]]):
                     file_hash = sha256_of_file(pic)
                     row[idx["Proof"]] = file_hash
                     row[idx["Done"]] = "Y"
