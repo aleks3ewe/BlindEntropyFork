@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blindentropyfork"
+version = "0.1.0"
+description = "BlindEntropyFork research toolkit"
+authors = [{ name = "Egor Alekseev" }]
+readme = "docs/README.md"
+license = { text = "The Unlicense" }
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.31",
+    "pycryptodome>=3.20",
+    "opentimestamps-client>=0.7"
+]
+
+[project.scripts]
+bef-roll = "blindentropyfork.cli:roll_entry"
+bef-proof = "blindentropyfork.cli:proof_entry"
+bef-stamp = "blindentropyfork.cli:stamp_entry"
+bef-anom = "blindentropyfork.cli:anom_entry"
+
+[tool.setuptools.packages.find]
+where = ["src"]

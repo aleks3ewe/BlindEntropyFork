@@ -14,21 +14,22 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+        with: { python-version: '3.12' }
 
-      - run: pip install requests pycryptodome
+      - run: pip install .
 
-      - name: write‑key
+      - name: write-key
         run: echo -n "$AES_KEY" > aes_key.txt
-        env:
-          AES_KEY: ${{ secrets.AES_KEY }}
+        env: { AES_KEY: ${ { secrets.AES_KEY } } }
 
-      - name: roll‑C
-        run: python blind_entropy_roll.py --group C --key $(cat aes_key.txt)
+      - name: roll-C
+        run: bef-roll --group C --key $(cat aes_key.txt)
+
+      - name: OTS stamp log
+        run: ots stamp logs/log_template.csv
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "C‑roll $(date -u +'%Y-%m-%d %H:%M')"
-          file_pattern: log_template.csv
-          branch: main
+          commit_message: "C-roll + OTS $(date -u +'%Y-%m-%d %H:%M')"
+          file_pattern: logs/log_template.csv logs/log_template.csv.ots
+          branch: master

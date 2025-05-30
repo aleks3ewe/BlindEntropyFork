@@ -6,6 +6,7 @@ decrypt_task_id(key_hex: str, ciphertext_b64: str) -> int
 """
 import base64
 import secrets
+
 from Crypto.Cipher import AES
 
 _NONCE_LEN = 12
