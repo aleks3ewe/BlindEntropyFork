@@ -25,10 +25,16 @@ jobs:
           AES_KEY: ${{ secrets.AES_KEY }}
         run: echo -n "$AES_KEY" > aes_key.txt
 
+      - name: debug structure
+        run: |
+          echo "PWD = $(pwd)"
+          ls -la
+          ls -la blindentropyfork
+
       - name: run roll-C
         run: |
           cd $GITHUB_WORKSPACE
-          PYTHONPATH=. python3 -m blindentropyfork.roll --group C --key $(cat aes_key.txt)
+          python3 blindentropyfork/roll.py --group C --key $(cat aes_key.txt)
 
       - name: OTS stamp log
         run: ots stamp logs/log_template.csv
