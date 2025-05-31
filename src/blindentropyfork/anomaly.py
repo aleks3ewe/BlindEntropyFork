@@ -4,26 +4,23 @@ CLI (A1–A5) → anomaly_log.jsonl
 """
 import argparse
 import csv
-import hashlib
+import json
 from pathlib import Path
 from typing import Optional
 
-from blindentropyfork.anomalies import add_anomaly
-from blindentropyfork.utils import ots_stamp
+from blindentropyfork.utils import ots_stamp, sha256
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 CSV_PATH = ROOT / "logs" / "log_template.csv"
 ANOMALY_LOG = ROOT / "logs" / "anomaly_log.jsonl"
 ALL_OTS = ROOT / "all_ots"
 OTS_EXT = ".ots"
 
 
-def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            h.update(chunk)
-    return h.hexdigest()
+def add_anomaly(entry: dict) -> None:
+    ANOMALY_LOG.parent.mkdir(exist_ok=True)
+    with ANOMALY_LOG.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 def task_id_for_day(day: str, group: str) -> Optional[str]:
@@ -67,7 +64,9 @@ def main() -> None:
         proof_hash = sha256(args.proof)
         print(f"SHA-256 proof: {proof_hash}")
 
-        ots_stamp(args.proof)
+        if not ots_stamp(args.proof):
+            print("❌ OTS failed on proof file.")
+            return
 
         ALL_OTS.mkdir(exist_ok=True)
         ots_file = args.proof.with_suffix(args.proof.suffix + OTS_EXT)

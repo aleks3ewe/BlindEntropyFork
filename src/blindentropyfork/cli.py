@@ -1,21 +1,17 @@
 import sys
 
+from blindentropyfork.anomaly import main as anomaly_main
 from blindentropyfork.proof import main as proof_main
 from blindentropyfork.roll import main as roll_main
+from blindentropyfork.stamp import main as stamp_main
 
 
 def stamp_entry() -> None:  # bef-stamp
-    script_path = "scripts/stamp_prethought.py"
-    with open(script_path, "rb") as f:
-        code = compile(f.read(), script_path, 'exec')
-        exec(code, {'__name__': '__main__', '__file__': script_path})
+    sys.exit(stamp_main())
 
 
 def anom_entry() -> None:  # bef-anom
-    script_path = "scripts/log_anomaly.py"
-    with open(script_path, "rb") as f:
-        code = compile(f.read(), script_path, 'exec')
-        exec(code, {'__name__': '__main__', '__file__': script_path})
+    sys.exit(anomaly_main())
 
 
 def roll_entry() -> None:  # bef-roll

@@ -1,6 +1,6 @@
-# BlindEntropyFork Protocol — v2025-05-30
+# BlindEntropyFork Protocol — v2025-05-31
 
-<sub>*Last edited / последнее редактирование: 2025-05-30*</sub>
+<sub>*Last edited / последнее редактирование: 2025-05-31*</sub>
 
 ---
 
@@ -37,6 +37,18 @@ Let **λ<sub>k</sub> = (# anomalies in group *k*) / N<sub>days</sub>**
 χ² (2 × 3) + two contrasts (A–B, B–C) → Holm–Bonferroni, α<sub>corr</sub>≈0.025.  
 Power sim → N = 61 days ⇒ 1 − β ≈ 0.82 for Δλ ≥ 0.30 day⁻¹.
 
+### Статистические утверждения
+
+*Единица анализа = календарный день.*
+
+Пусть **λ<sub>k</sub> = (# аномалий в группе *k*) / N<sub>дней</sub>**
+
+* H₀ : λ<sub>A</sub> = λ<sub>B</sub> = λ<sub>C</sub>
+* H₁ : λ<sub>A</sub> > λ<sub>B</sub> ≥ λ<sub>C</sub>
+
+χ² (2 × 3) + два контраста (A–B, B–C) → Холм–Бонферрони, α<sub>corr</sub>≈0.025.  
+Симуляция мощности → N = 61 день ⇒ 1 − β ≈ 0.82 при Δλ ≥ 0.30 день⁻¹.
+
 ---
 
 ## 2 Anomaly-detection protocol A1–A5 | Протокол фиксации аномалий
@@ -55,7 +67,7 @@ Double-blind: два кодировщика для A2/A5 без знания `Ta
 
 ---
 
-## 3 Daily pipeline — strict ver. 2025-05-30
+## 3 Daily pipeline — strict ver. 2025-05-31 | Ежедневный план - строгая вер. 2025-05-31
 
 *(click to expand / нажмите, чтобы развернуть)*
 
@@ -82,32 +94,43 @@ Double-blind: два кодировщика для A2/A5 без знания `Ta
 
 ---
 
-## 4 Verifiability & Open Science
+## 4 Verifiability & Open Science | Проверяемость и открытая наука
+
+### EN
 
 * Three independent OTS layers
     1. **Pre-thought** (`YYYY-MM-DD_prethought.*.ots`)
-    2. **Rolls** (`YYYY-MM-DD_log_template.csv.ots`) — one per cast
+    2. **Rolls** (`YYYY-MM-DD_log_template_X.csv.ots`) — one per cast, where X - [A,B,C]
     3. **Day-end** (`YYYY-MM-DD_log_template_dayend.csv.ots`) — after `bef-proof`
+* All `.ots` files are automatically **moved** to `all_ots/`.
+* Anomaly proof files are stamped and archived in the same way.
+
+### RU
+
+* Три независимых уровня подписи через OTS
+    1. **Предварительная мысль** (`YYYY-MM-DD_prethought.*.ots`)
+    2. **Броски** (`YYYY-MM-DD_log_template_X.csv.ots`) — по одному на каждый бросок,<br> где X - [A,B,C]
+    3. **Конец дня** (`YYYY-MM-DD_log_template_dayend.csv.ots`) — после `bef-proof`
 * Все `.ots` автоматически **перемещаются** в `all_ots/`.
 * Файлы-доказательства аномалий штампуются и архивируются аналогично.
 
 ---
 
-## 5 Project layout
+## 5 Project layout | Планировка проекта
 
 ```text
 BlindEntropyFork/
 ├── docs/README.md                ← this file
 ├── src/blindentropyfork/         ← core package
+│   ├── __init__.py
+│   ├── __main__.py
 │   ├── roll.py          # bef-roll
 │   ├── proof.py         # bef-proof
 │   ├── encrypt_utils.py # AES-256-GCM
 │   ├── utils.py         # OTS helpers
-│   ├── anomalies.py     # anomaly logger
+│   ├── stamp.py         # bef-stamp
+│   ├── anomaly.py       # bef-anom
 │   └── cli.py           # entry-points
-├── scripts/
-│   ├── stamp_prethought.py # bef-stamp
-│   └── log_anomaly.py      # bef-anom
 ├── logs/                   # log_template.csv, anomaly_log.jsonl (+ .ots)
 ├── proof/                  # prethought/, used/, anomalies/, YYYY-MM/
 ├── all_ots/                # archived .ots

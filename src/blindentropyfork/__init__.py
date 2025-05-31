@@ -1,1 +1,1 @@
-__all__ = ["roll", "proof", "anomalies", "encrypt_utils", "utils"]
+__all__ = ["roll", "proof", "anomaly", "stamp", "encrypt_utils", "utils"]

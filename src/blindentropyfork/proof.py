@@ -11,13 +11,13 @@ BlindEntropyFork proof-harvester
 """
 
 import csv
-import hashlib
 import json
 import re
 import shutil
+import sys
 from pathlib import Path
 
-from blindentropyfork.utils import ots_stamp
+from blindentropyfork.utils import ots_stamp, sha256
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PROOF_DIR = ROOT / "proof"
@@ -26,14 +26,6 @@ ANOMALY_LOG = ROOT / "logs" / "anomaly_log.jsonl"
 USED_DIR = PROOF_DIR / "used"
 
 name_re = re.compile(r"(\d{4}-\d{2}-\d{2})_Task(\d{1,2})_.*\.(jpg|png)$", re.I)
-
-
-def sha256_of_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 
 def load_log():
@@ -76,7 +68,7 @@ def main():
 
             for row in rows:
                 if row[idx["Date"]] == date and row[idx["TaskID"]] == task_id and is_empty(row[idx["Proof"]]):
-                    file_hash = sha256_of_file(pic)
+                    file_hash = sha256(pic)
                     row[idx["Proof"]] = file_hash
                     row[idx["Done"]] = "Y"
                     dest = USED_DIR / month
@@ -94,7 +86,9 @@ def main():
             row[idx["Anomaly"]] = ",".join(anomalies[key])
 
     save_log(header, rows)
-    ots_stamp(CSV_PATH)
+    if not ots_stamp(CSV_PATH):
+        print("⚠️  OTS stamping failed for log_template.csv")
+        sys.exit("Error: OTS stamping failed for critical file.")
 
     date_prefix = max(row[idx["Date"]] for row in rows if row[idx["Date"]])
     ots_file = CSV_PATH.with_suffix(".csv.ots")
@@ -107,6 +101,7 @@ def main():
         print(f"📦 Dayend OTS saved → all_ots/{dest_name}")
     else:
         print("⚠️  Dayend OTS not found!")
+
 
 if __name__ == "__main__":
     main()

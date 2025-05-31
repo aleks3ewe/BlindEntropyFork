@@ -9,15 +9,14 @@ Date,Group,Raw,TaskID,EncTaskID,Done,Anomaly,PreHash,Proof
 import argparse
 import csv
 import datetime as dt
-import hashlib
-import sys
 import shutil
+import sys
 from pathlib import Path
 
 import requests
 
 from blindentropyfork.encrypt_utils import encrypt_task_id
-from blindentropyfork.utils import ots_stamp
+from blindentropyfork.utils import ots_stamp, sha256
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 LOG_DIR = ROOT / "logs"
@@ -41,14 +40,6 @@ def fetch_qrng_byte() -> int:
     r = requests.get(QRNG_API, timeout=10)
     r.raise_for_status()
     return int(r.json()["data"][0])
-
-
-def sha256_of_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 
 def newest_prethought() -> Path:
@@ -107,7 +98,7 @@ def main() -> None:
         if not has_ots_stamp(pre_file):
             sys.exit("❌ Prethought has no OTS stamp made before 09:00.")
 
-        pre_hash = sha256_of_file(pre_file)
+        pre_hash = sha256(pre_file)
         USED_PRE_DIR.mkdir(parents=True, exist_ok=True)
 
         dst_pre = USED_PRE_DIR / pre_file.name
@@ -138,12 +129,12 @@ def main() -> None:
     ]
 
     append_row(row)
-    ots_stamp(CSV_PATH)
+    if not ots_stamp(CSV_PATH):
+        print("⚠️  OTS stamping failed for cast log")
+        sys.exit("Error: OTS stamping failed for critical file.")
 
     all_ots_dir = ROOT / "all_ots"
     all_ots_dir.mkdir(exist_ok=True)
-
-    ots_file = LOG_DIR / (CSV_PATH.name + OTS_EXT)
 
     ots_file = LOG_DIR / (CSV_PATH.name + OTS_EXT)
 
