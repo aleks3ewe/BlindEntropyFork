@@ -19,8 +19,9 @@ jobs:
       - run: pip install .
 
       - name: write-key
+        env:
+          AES_KEY: ${{ secrets.AES_KEY }}
         run: echo -n "$AES_KEY" > aes_key.txt
-        env: { AES_KEY: ${ { secrets.AES_KEY } } }
 
       - name: roll-C
         run: bef-roll --group C --key $(cat aes_key.txt)
