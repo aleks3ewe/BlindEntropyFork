@@ -18,7 +18,7 @@ jobs:
           python-version: '3.12'
 
       - name: install dependencies
-        run: pip install -r requirements.txt  # если есть зависимости
+        run: pip install -r requirements.txt
 
       - name: write AES key
         env:
@@ -26,9 +26,9 @@ jobs:
         run: echo -n "$AES_KEY" > aes_key.txt
 
       - name: run roll-C
-        env:
-          PYTHONPATH: .
-        run: python3 -m blindentropyfork.roll --group C --key $(cat aes_key.txt)
+        run: |
+          cd $GITHUB_WORKSPACE
+          PYTHONPATH=. python3 -m blindentropyfork.roll --group C --key $(cat aes_key.txt)
 
       - name: OTS stamp log
         run: ots stamp logs/log_template.csv
