@@ -25,7 +25,9 @@ jobs:
           AES_KEY: ${{ secrets.AES_KEY }}
         run: echo -n "$AES_KEY" > aes_key.txt
 
-      - name: roll-C
+      - name: run roll-C
+        env:
+          PYTHONPATH: .
         run: python3 -m blindentropyfork.roll --group C --key $(cat aes_key.txt)
 
       - name: OTS stamp log
