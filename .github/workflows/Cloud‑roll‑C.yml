@@ -30,8 +30,11 @@ jobs:
           cd $GITHUB_WORKSPACE
           PYTHONPATH=src python3 -m blindentropyfork.roll --group C --key $(cat aes_key.txt)
 
+      - name: Get UTC timestamp
+        run: echo "COMMIT_MSG=C-roll + OTS $(date -u +'%Y-%m-%d %H:%M')" >> $GITHUB_ENV
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "C-roll + OTS $(date -u +'%Y-%m-%d %H:%M')"
-          file_pattern: logs/log_template.csv logs/log_template.csv.ots
+          commit_message: ${{ env.COMMIT_MSG }}
+          file_pattern: logs/log_template.csv all_ots/*_log_template_C.csv.ots
           branch: master
