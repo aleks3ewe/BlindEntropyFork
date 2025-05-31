@@ -1,2 +1,2 @@
-{"date": "2025-05-30", "group": "A", "code": "A1", "description": "ok", "task_id": 1, "proof_sha256": "c07bdba507ee8bb92e24d353c40575afacffc5931aae351d1f2a4eca17c61f29", "proof_fname": "2025-05-30_yeti.png"}
-{"date": "2025-05-30", "group": "B", "code": "A5", "description": "notok", "task_id": 10, "proof_sha256": "1ec97807cb511a0cfd818487e28733700fa432d3c48748a1328499d604da3a42", "proof_fname": "2025-05-30_grib.png"}
+{"date": "2025-05-31", "group": "A", "code": "A1", "description": "ok", "proof_sha256": "c07bdba507ee8bb92e24d353c40575afacffc5931aae351d1f2a4eca17c61f29", "proof_fname": "2025-05-31_yeti.png"}
+{"date": "2025-05-31", "group": "B", "code": "A5", "description": "notok", "proof_sha256": "1ec97807cb511a0cfd818487e28733700fa432d3c48748a1328499d604da3a42", "proof_fname": "2025-05-31_grib.png"}

@@ -30,11 +30,6 @@ jobs:
           cd $GITHUB_WORKSPACE
           PYTHONPATH=src python3 -m blindentropyfork.roll --group C --key $(cat aes_key.txt)
 
-      - name: OTS stamp log
-        run: |
-          cd $GITHUB_WORKSPACE
-          ots stamp logs/log_template.csv
-
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "C-roll + OTS $(date -u +'%Y-%m-%d %H:%M')"

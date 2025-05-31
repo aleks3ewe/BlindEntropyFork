@@ -145,8 +145,11 @@ def main() -> None:
 
     ots_file = LOG_DIR / (CSV_PATH.name + OTS_EXT)
 
+    ots_file = LOG_DIR / (CSV_PATH.name + OTS_EXT)
+
     if ots_file.exists():
-        dest_name = f"{today_str()}_{ots_file.name}"
+        group_suffix = args.group.upper()
+        dest_name = f"{today_str()}_log_template_{group_suffix}.csv.ots"
         dest = all_ots_dir / dest_name
         shutil.move(str(ots_file), str(dest))
         print(f"📦 Moved CSV OTS → all_ots/{dest_name}")
