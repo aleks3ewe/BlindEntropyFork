@@ -115,6 +115,7 @@ def main() -> None:
             sys.exit("❌ For group C, --key <HEX256> is mandatory.")
         enc_task_id = encrypt_task_id(args.key, task_id)
         task_id = "—"
+        raw = "—"
 
     row = [
         today_str(),
